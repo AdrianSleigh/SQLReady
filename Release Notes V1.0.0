@@ -1,0 +1,139 @@
+⭐ SQLReady v1.0.0 — Release Notes
+🎉 Overview
+SQLReady v1.0.0 is the first public release of the SQL Server upgrade‑readiness engine designed for defence, finance, and government estates.
+This version introduces the full baseline workflow, diagnostics engine, migration blocker detection, BI stack checks, perf‑impact analysis, and structured evidence output.
+
+It is read‑only, Citrix‑friendly, and suitable for SC‑cleared environments.
+
+🚀 New in v1.0.0
+🔍 Upgrade Readiness Engine
+Deprecated feature detection
+
+Version‑specific migration blockers
+
+Compatibility level issues
+
+Unsupported configuration checks
+
+⚡ Performance Impact Analysis
+Cardinality Estimator version detection
+
+Memory grant pressure indicators
+
+Plan regression risk signals
+
+Query Store readiness checks
+
+📊 BI Stack Compatibility
+SSIS package format validation
+
+SSRS catalog version checks
+
+SSAS model compatibility checks
+
+🛠 Diagnostics & Configuration
+Config drift detection
+
+Unsupported settings
+
+Security posture indicators
+
+Availability posture checks (AG/cluster)
+
+📑 PRE/POST Baseline Engine
+PRE baseline capture
+
+POST baseline capture
+
+Automatic delta comparison
+
+CAB/cyber‑ready evidence output
+
+🗄 SQLReady Repository
+Repository schema creation
+
+Views for reporting
+
+Helper stored procedures
+
+Structured findings and facts
+
+📁 Repository Structure
+Includes modules for:
+
+Migration
+
+Diagnostics
+
+Performance
+
+Config
+
+Availability
+
+Security
+
+BI
+
+Plus folders for:
+
+Reports (HTML, Grafana, PBIRS templates)
+
+Samples (PRE/POST examples)
+
+📘 Documentation
+Full README.md
+
+MIT License
+
+CHANGELOG.md
+
+VERSION.txt
+
+🔒 Security & Safety
+SQLReady v1.0.0 is designed for secure estates:
+
+Read‑only execution
+
+No engine hooks
+
+No configuration changes
+
+No plan forcing
+
+Safe for Citrix‑hosted SSMS
+
+Suitable for SC‑cleared workflows
+
+📦 Installation
+Deploy the SQLReady repository using CreateRepository.sql
+
+Run SQLReady.sql to generate findings
+
+Capture PRE baseline
+
+Perform upgrade
+
+Capture POST baseline
+
+Review delta report
+
+🧭 Roadmap
+Planned for future releases:
+
+SQLReadyBI standalone module
+
+SQLReadyPerfStore (Query Store analysis)
+
+PBIRS paginated report templates
+
+Grafana/Telegraf integration queries
+
+HTML PRE/POST report generator
+
+Estate‑wide orchestration
+
+👤 Author
+Adrian Sleigh  
+SQL Server Consultant — Defence, Finance & Government
+Creator of SQLReady
