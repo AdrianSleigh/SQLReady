@@ -21,7 +21,7 @@ Appendix A. Example parameter sets	8
 Appendix B. Validation queries	9
  
 1. Scope and Audience
-This document describes the operating and technical model of UpgradeBuddy v7.0.1 Official. It is intended for DBAs, technical reviewers, upgrade engineers, change managers and teams producing CAB or cyber evidence.
+This document describes the operating and technical model of SQLReady v1.0.0 Official. It is intended for DBAs, technical reviewers, upgrade engineers, change managers and teams producing CAB or cyber evidence.
 1.1 Objectives
 •	Assess whether an instance is ready for an in-place upgrade or migration.
 •	Preserve an auditable PRE baseline.
@@ -30,12 +30,12 @@ This document describes the operating and technical model of UpgradeBuddy v7.0.1
 •	Expose reliable repository reporting without requiring a procedural compare mode.
 •	Support concise operational output and detailed evidence exports.
 1.2 Supported SQL Server versions
-The v7.0.1 header states support for SQL Server 2008/R2, 2012, 2014, 2016, 2017, 2019, 2022 and 2025.
+The v1.0.0 header states support for SQL Server 2008/R2, 2012, 2014, 2016, 2017, 2019, 2022 and 2025.
 Authoritative baseline
-UpgradeBuddy v7.0.1 Official is the current baseline for this document. The repository redesign stores self-describing run context and compatibility evidence.
+SQLReady v1.0.0 Official is the current baseline for this document. The repository redesign stores self-describing run context and compatibility evidence.
 
 2. Architecture and Execution Model
-UpgradeBuddy executes as a T-SQL assessment script against the selected SQL Server instance. Temporary tables support in-run collection and formatting; repository tables preserve long-term evidence when SAVE is selected.
+SQLReady v1.0.0 executes as a T-SQL assessment script against the selected SQL Server instance. Temporary tables support in-run collection and formatting; repository tables preserve long-term evidence when SAVE is selected.
 2.1 Logical flow
 Parameters
    -> Instance and database discovery
@@ -52,9 +52,9 @@ Parameters
 •	The script does not write operating-system files.
 •	JSON and CSV are returned as result sets for the operator to retain.
 2.3 Recommended repository placement
-For an estate with a common DBA utility database, use ZDBA with the UpgradeBuddy schema. This keeps UpgradeBuddy objects isolated while avoiding a dedicated database per server.
-Database: ZDBA
-Schema:   UpgradeBuddy
+For an estate with a common DBA utility database, use SQLReady_DB with the SQLReady v1.0.0 schema. This keeps objects isolated while avoiding a dedicated database per server.
+Database: SQLReady_DB
+Schema:   SQL_Ready_DB
 3. Parameters and Modes
 Parameter	Typical values	Purpose
 @TargetMajorVersion	15, 16, 17	Selects SQL Server 2019, 2022 or 2025 target rules.
@@ -64,8 +64,8 @@ Parameter	Typical values	Purpose
 @RepositoryMode	NONE, SAVE	NONE is read-only; SAVE persists evidence.
 @SnapshotFormat	NONE, JSON, CSV, BOTH	Controls portable evidence result sets.
 @ProjectName	Change/project identifier	Links PRE and POST evidence.
-@RepositoryDatabase	ZDBA or configured repository	Repository database.
-@RepositorySchema	UpgradeBuddy	Repository object namespace.
+@RepositoryDatabase	SQLReady_DB or configured repository	Repository database.
+@RepositorySchema	SQLReady_DB	Repository object namespace.
 
 3.1 Output modes
 EXECUTIVE: Counts and overall RAG for a management-level view.
@@ -78,7 +78,7 @@ JSON: Structured document suitable for automation or a future application.
 CSV: Tabular evidence suitable for Excel and ingestion.
 BOTH: Returns both portable formats.
 4. Repository Data Model
-v7.0.1 uses three evidence tables with explicit run context. Repository rows are committed before reporting views are created, and each view is created in its own batch.
+v1.0.0 uses three evidence tables with explicit run context. Repository rows are committed before reporting views are created, and each view is created in its own batch.
 4.1 AssessmentFinding
 Column group	Content
 Run context	RunId, ProjectName, AssessmentPhase, AssessmentTime, ExecutedInstance
@@ -119,10 +119,10 @@ The assessment logic can run similarly in both phases, but the phase identifies 
 8.	Confirm rows were stored for the correct instance.
 9.	Review repository views for configuration drift and compatibility status.
 10.	Address regressions before final sign-off.
-5.3 Why v7.0.1 does not require a procedural COMPARE mode
+5.3 Why v1.0.0 does not require a procedural COMPARE mode
 The repository is designed to hold PRE and POST evidence as independent facts. Reporting views compare those facts. This simplifies execution, preserves history and makes the comparison repeatable without relying on temporary tables from an earlier session.
 Operational rule
-PRE and POST must use the same ProjectName. If multiple PRE baselines exist, reporting must identify the intended baseline according to the v7.0.1 view logic.
+PRE and POST must use the same ProjectName. If multiple PRE baselines exist, reporting must identify the intended baseline according to the v1.0.0 view logic.
 
 6. Compatibility Evidence and Rules
 6.1 Scope
@@ -182,7 +182,7 @@ CSV result sets are intended for evidence packs, Excel review and ingestion. Sav
 •	DBCC metadata, service DMVs and some msdb inventories may return NOT CHECKED when permissions are restricted.
 •	Do not treat NOT CHECKED as PASS. Provide alternate evidence or rerun with an approved assessment identity.
 Least privilege
-UpgradeBuddy should not be used as a reason to grant permanent broad privileges. Use approved temporary or controlled access and retain the resulting evidence.
+SQLReady should not be used as a reason to grant permanent broad privileges. Use approved temporary or controlled access and retain the resulting evidence.
 
 10. Troubleshooting
 Symptom	Likely cause	Action
@@ -195,19 +195,19 @@ No PRE/POST report	ProjectName, phase, instance or repository context mismatch	V
 
 10.1 Repository verification queries
 SELECT TOP (20) *
-FROM ZDBA.UpgradeBuddy.AssessmentFinding
+FROM SQLReady_DB.SQLReady_DB.AssessmentFinding
 ORDER BY AssessmentTime DESC;
 
 SELECT TOP (20) *
-FROM ZDBA.UpgradeBuddy.InventoryFact
+FROM SQLReady_DB.SQLReady_DB.InventoryFact
 ORDER BY AssessmentTime DESC;
 
 SELECT TOP (20) *
-FROM ZDBA.UpgradeBuddy.CompatibilityFact
+FROM SQLReady_DB.SQLReady_DB.CompatibilityFact
 ORDER BY AssessmentTime DESC;
 11. Operational Runbook
 11.1 Before the change
-11.	Confirm the exact v7.0.1 Official script checksum or controlled source.
+11.	Confirm the exact v1.0.0 Official script checksum or controlled source.
 12.	Set target version, method, repository and project parameters.
 13.	Run a read-only SUMMARY assessment.
 14.	Resolve blockers and evidence gaps.
@@ -271,5 +271,5 @@ FROM ZDBA.UpgradeBuddy.AssessmentFinding
 WHERE ActionRequired = 1
 ORDER BY AssessmentTime DESC, Status, CheckGroup, ScopeName;
 Document control
-This guide describes UpgradeBuddy v7.0.1 Official. Update the version, release notes and technical documentation whenever functional script behaviour changes.
+This guide describes SQLReady_DB.SQLReady_DB v1.0.0 Official. Update the version, release notes and technical documentation whenever functional script behaviour changes.
 
